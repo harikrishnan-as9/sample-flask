@@ -18,7 +18,6 @@ class Movies(Resource):
     def get(self):
         return [movie.json() for movie in MoviesModel.find_all()]
     
-    @jwt_required(optional=jwt_optional)
     def post(self):
         data = parser.parse_args()
         title = data['title']
