@@ -14,14 +14,12 @@ class Login(Resource):
         user = UserModel.find_by_username(username)
         
         if not user:
-            return {'message': 'Invalid username'}, 404
+            return {'msg': 'Invalid username'}, 404
         if user and user.password != password:
-            return {'message': 'Password incorrect'} , 400
+            return {'msg': 'Password incorrect'} , 400
         
         if user and user.password == password:
-            access_token = create_access_token(identity=username, fresh=True)
+            access_token = create_access_token(identity=username, fresh=True, additional_claims=user.json())
             return {
                 'access_toke': access_token
             }
-
-        

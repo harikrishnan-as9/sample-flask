@@ -19,7 +19,7 @@ class Users(Resource):
         role = data['role'].lower() if data['role'] else 'default'
 
         if UserModel.find_by_username(username):
-            return {'message': f'username "{username}" already taken'}, 400
+            return {'msg': f'username "{username}" already taken'}, 400
         
         user = UserModel(username=username, password=password, role=role)
         user.save()
@@ -29,7 +29,7 @@ class User(Resource):
     def put(self, _id):
         user = UserModel.find_by_id(_id)
         if not user:
-            return {'message': f'User with id "{_id}" doesn\'t exist'}, 404
+            return {'msg': f'User with id "{_id}" doesn\'t exist'}, 404
         
         data = _parser.parse_args()
         username = data['username']
@@ -37,7 +37,7 @@ class User(Resource):
         role = data['role'].lower() if data['role'] else user.role
 
         if UserModel.find_by_username(username) and UserModel.find_by_username(username)._id != user._id:
-            return {'message': f'Another user with username "{username}" already exist'}, 400
+            return {'msg': f'Another user with username "{username}" already exist'}, 400
 
         user.username = username    
         user.password = password
@@ -49,12 +49,12 @@ class User(Resource):
     def delete(self, _id):
         user = UserModel.find_by_id(_id)
         if not user:
-            return {'message': f'User with id "{_id}" doesn\'t exist'}, 404
+            return {'msg': f'User with id "{_id}" doesn\'t exist'}, 404
         
         data = user.json()
         user.delete()
         return {
-            'message': f'user with id "{_id}" has been deleted',
+            'msg': f'user with id "{_id}" has been deleted',
             'data': data
         }
 

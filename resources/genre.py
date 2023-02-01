@@ -14,7 +14,7 @@ class Genres(Resource):
         name = data['name'].capitalize()
         if GenreModel.find_by_name(name=name):
             return {
-                'message': f'{name} already taken'
+                'msg': f'{name} already taken'
             }, 400
         genre = GenreModel(name=name)
         genre.save()
@@ -26,7 +26,7 @@ class Genre(Resource):
         genre = GenreModel.find_by_id(_id)
         if genre is None:
             return {
-                'message': f'Item with id {_id} is not available'
+                'msg': f'Item with id {_id} is not available'
             }, 404
         
         data = parser.parse_args()
@@ -39,12 +39,12 @@ class Genre(Resource):
         genre = GenreModel.find_by_id(_id)
         if genre is None:
             return {
-                'message': f'Item with id {_id} is not available'
+                'msg': f'Item with id {_id} is not available'
             }, 404
         
         genre.delete()
         return {
-            'message': f'Item with id {_id} is deleted',
+            'msg': f'Item with id {_id} is deleted',
             'item': genre.json()
         }
 
