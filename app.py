@@ -6,6 +6,7 @@ from flask_migrate import Migrate
 from db import db
 from resources.genre import Genres, Genre
 from resources.movies import Movies, Movie
+from resources.user import Users, User
 
 app = Flask(__name__)
 
@@ -38,6 +39,9 @@ api.add_resource(Genre, '/genre/<int:_id>')
 
 api.add_resource(Movies, '/movies')
 api.add_resource(Movie, '/movie/<int:_id>')
+
+api.add_resource(Users, '/users')
+api.add_resource(User, '/user/<int:_id>')
 
 debug = True
 port = 5000

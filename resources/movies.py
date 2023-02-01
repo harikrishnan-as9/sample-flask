@@ -76,5 +76,3 @@ class Movie(Resource):
         data = movie.json()
         movie.delete()
         return {'message': f'movie with {movie.title} has been deleted', 'data':data}
-
-        
