@@ -1,3 +1,3 @@
 config = {
-    'jwt_required':False
+    'jwt_required':True
 }

@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt
 from models.movies import MoviesModel
 from models.genre import GenreModel
 from config import config
@@ -76,6 +76,10 @@ class Movie(Resource):
     
     @jwt_required(optional=jwt_optional)
     def delete(self, _id):
+        is_admin = get_jwt()['isAdmin']
+        if(not is_admin):
+            return {'msg': 'Not authorized, only admin can delte movie'}, 401
+
         movie = MoviesModel.find_by_id(_id)
         if not movie:
             return {'msg': f'movie with id: {_id} is not present in database'}, 404
