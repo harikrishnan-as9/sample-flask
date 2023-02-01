@@ -19,7 +19,7 @@ class Users(Resource):
         role = data['role'].lower() if data['role'] else 'default'
 
         if UserModel.find_by_username(username):
-            return {'message': f'username "{username}" already taken'}, 404
+            return {'message': f'username "{username}" already taken'}, 400
         
         user = UserModel(username=username, password=password, role=role)
         user.save()

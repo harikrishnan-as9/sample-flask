@@ -12,6 +12,7 @@ class UserModel(db.Model):
         return {
             '_id': self._id,
             'username': self.username,
+            'name': self.username.capitalize(),
             'role': self.role,
             'isAdmin': self.role.lower() == 'admin',
         }

@@ -2,11 +2,13 @@ import os
 from flask import Flask
 from flask_restful import Api
 from flask_migrate import Migrate
+from flask_jwt_extended import JWTManager
 
 from db import db
 from resources.genre import Genres, Genre
 from resources.movies import Movies, Movie
 from resources.user import Users, User
+from resources.auth import Login
 
 app = Flask(__name__)
 
@@ -19,6 +21,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
 api = Api(app)
+jwt = JWTManager(app)
 
 migrate = Migrate(app, db)
 
@@ -42,6 +45,8 @@ api.add_resource(Movie, '/movie/<int:_id>')
 
 api.add_resource(Users, '/users')
 api.add_resource(User, '/user/<int:_id>')
+
+api.add_resource(Login, '/login')
 
 debug = True
 port = 5000
