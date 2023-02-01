@@ -1,6 +1,7 @@
 from flask_restful import Resource, reqparse
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, get_jti
 from models.user import UserModel
+from services.auth import set_user_token
 
 parser = reqparse.RequestParser()
 parser.add_argument('password', type=str, required=True)
@@ -11,6 +12,7 @@ _parser.add_argument('username', type=str, required=True)
 
 def get_user_response(user):
     access_token = create_access_token(identity=user.username, fresh=True, additional_claims=user.json())
+    set_user_token(user.username, get_jti(access_token))
     response = user.json()
     status_code = 200
     headers = {'x-access-token':access_token}

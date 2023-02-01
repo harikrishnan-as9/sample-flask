@@ -1,3 +1,4 @@
 config = {
-    'jwt_required':True
+    'jwt_required': False,
+    'latest_token_required': False
 }

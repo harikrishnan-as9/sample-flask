@@ -18,6 +18,7 @@ class Movies(Resource):
     def get(self):
         return [movie.json() for movie in MoviesModel.find_all()]
     
+    @jwt_required(optional=jwt_optional)
     def post(self):
         data = parser.parse_args()
         title = data['title']
@@ -75,8 +76,9 @@ class Movie(Resource):
     
     @jwt_required(optional=jwt_optional)
     def delete(self, _id):
-        is_admin = get_jwt()['isAdmin']
-        if(not is_admin):
+        is_admin = get_jwt().get('isAdmin')
+        print(is_admin)
+        if(not jwt_optional and not is_admin):
             return {'msg': 'Not authorized, only admin can delte movie'}, 401
 
         movie = MoviesModel.find_by_id(_id)

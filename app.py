@@ -9,6 +9,8 @@ from resources.genre import Genres, Genre
 from resources.movies import Movies, Movie
 from resources.user import Users, User
 from resources.auth import Login
+from services.auth import get_user_token
+from config import config
 
 app = Flask(__name__)
 
@@ -36,6 +38,16 @@ def after_request(response):
     response.headers['Access-Control-Allow-Headers'] = '*'
     return response
 
+@jwt.token_in_blocklist_loader
+def check_if_token_is_revoked(jwt_header, jwt_payload: dict):
+    if not config['jwt_required']:
+        return False
+    if not config['latest_token_required']:
+        return False
+    username = jwt_payload['sub']
+    jti = jwt_payload['jti']
+    valid_jti = get_user_token(username)
+    return not jti==valid_jti
 
 api.add_resource(Genres, '/genres')
 api.add_resource(Genre, '/genre/<int:_id>')
