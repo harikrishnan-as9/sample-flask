@@ -1,4 +1,5 @@
 from flask_restful import Resource, reqparse
+from flask_jwt_extended import create_access_token
 from models.user import UserModel
 
 parser = reqparse.RequestParser()
@@ -7,6 +8,14 @@ parser.add_argument('role', type=str)
 
 _parser = parser.copy()
 _parser.add_argument('username', type=str, required=True)
+
+def get_user_response(user):
+    access_token = create_access_token(identity=user.username, fresh=True, additional_claims=user.json())
+    response = user.json()
+    status_code = 200
+    headers = {'x-access-token':access_token}
+    return (response, status_code, headers)
+
 
 class Users(Resource):
     def get(self):
@@ -23,7 +32,7 @@ class Users(Resource):
         
         user = UserModel(username=username, password=password, role=role)
         user.save()
-        return user.json()
+        return get_user_response(user)
     
 class User(Resource):
     def put(self, _id):
@@ -44,7 +53,7 @@ class User(Resource):
         user.role = role
         user.save()
 
-        return user.json()
+        return get_user_response(user)
     
     def delete(self, _id):
         user = UserModel.find_by_id(_id)
